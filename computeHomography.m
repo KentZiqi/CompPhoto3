@@ -1,12 +1,6 @@
-function H = computeHomography(peri, center)
+function H = computeHomography(x, y, xx, yy)
 
-imshow(peri)
-title('select four points')
-[x,y] = ginput(4);
 
-imshow(center)
-title('select four points')
-[xx,yy] = ginput(4);
 
 xy_matrix = [];
 for i=1:1:4
