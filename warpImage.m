@@ -1,12 +1,13 @@
-function II = warpImage(I,J)
-    imshow(I)
-    title('select four points')
-    [x,y] = ginput(4);
-
-    imshow(J)
-    title('select four points')
-    [xx,yy] = ginput(4);
+function peri = warpImage(main,peri)
+    imshow(main)
+    title('Select Four Points of Center Image')
+    [fromX, fromY] = ginput(4);
     
-    H = computeHomography(x,y,xx,yy);
-    II = warp(I,H);
+    imshow(peri)
+    title('Select Four Points of Peripheral Image')
+    [toX, toY] = ginput(4);
+   
+    H = computeHomography(fromX, fromY, toX, toY);
+    
+    peri = warp(peri, H);
 end

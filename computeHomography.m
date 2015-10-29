@@ -7,8 +7,6 @@ end
 [~,~,V] = svd(xy_matrix);
 h = V(:,9);
 H = reshape(h,[3 3])';
-
-
 end
 
 

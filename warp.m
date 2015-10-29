@@ -1,13 +1,10 @@
-function J = warp(I, H)
-    [h, w] =size(I);
-    [hq, wq] = findExtremePoints(I,H);
-    J = zeros(hq,wq);
-    [X, Y] = meshgrid(1:1:w,1:1:h);
-    for i = 1:1:wq
-        for j = 1:1:hq
-            [i,j]
-            [xx,yy] = mapPoint(i,j,H,1);
-            J(i,j) = interp2(X,Y,I,xx,yy);
+function J = warp(image, H)
+    [minX, minY, maxX, maxY] = findExtremePoints(image,H);
+    J = zeros(500, 500);
+    for i = floor(minX):1:ceil(maxX)
+        for j = floor(minY):1:ceil(maxY)
+            [imageX,imageY] = mapPoint(i,j,H,0);
+            J(j+250,i+250) = interp2(image,imageX,imageY);
         end
     end
 end

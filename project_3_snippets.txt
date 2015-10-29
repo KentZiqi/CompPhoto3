@@ -1,0 +1,40 @@
+    nanI1 = isnan(I1);
+    nanI2 = isnan(I2);
+    I1(isnan(I1)) = 0;
+    I2(isnan(I2)) = 0;
+    figure
+    imshow(I1)
+    figure
+    imshow(I2)
+	
+	
+    I = cat(3, I1, I2);
+    I = mean(I,3);
+    figure
+    imshow(I)
+	
+	
+    I1 =  ~isnan(I1) .* I1;
+    I2 =  ~isnan(I2) .* I2;
+    I1(I1==0) = nan;
+    I2(I2==0) = nan;
+    figure
+    imshow(I1)
+    figure
+    imshow(I2)
+    I = cat(3, I1, I2);
+    I = mean(I,3);
+    figure
+    imshow(I)
+    figure
+    imshow(I1+I2);
+	
+	
+	
+	// Center to left apple.jpg
+	
+    fromX = [11.0461; 1.7908; 3.8475; 18.6560];
+    fromY = [8.4184; 9.2411; 53.8723; 50.1702];
+	
+    toX = [36.2137; 27.3431; 29.8451; 44.4020];
+    toY = [8.1196; 9.2569; 54.0647; 49.9706];
