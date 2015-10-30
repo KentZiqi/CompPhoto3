@@ -48,7 +48,22 @@ end
 peri1(isnan(peri1)) = 0;
 peri2(isnan(peri2)) = 0;
 J(isnan(J)) = 0;
-I = peri1+peri2+J;
+
+I = zeros(500, 500);
+[h, w] = size(I);
+for i = 1:1:h
+    for j = 1:1:w
+        if J(i,j) ~= 0
+            I(i,j) = J(i,j);
+        else
+            if peri1(i,j) ~= 0
+                I(i,j) = peri1(i,j);
+            else
+                I(i,j) = peri2(i,j);
+            end
+        end
+    end
+end
 figure
 imshow(I)
 
