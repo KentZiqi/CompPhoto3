@@ -1,27 +1,15 @@
 clear all
 close all
 
-canvas_size = 500;
+canvas_size = 1000;
 
-main = rgb2gray(im2double(imread('apple/middle.jpg')));
-peri1 = rgb2gray(im2double(imread('apple/left.jpg')));
-peri2 = rgb2gray(im2double(imread('apple/right.jpg')));
+main = rgb2gray(im2double(imread('aoi/middle.jpg')));
+peri1 = rgb2gray(im2double(imread('aoi/left.jpg')));
+peri2 = rgb2gray(im2double(imread('aoi/right.jpg')));
 
-fromX = [11.0461; 1.7908; 3.8475; 18.6560];
-fromY = [8.4184; 9.2411; 53.8723; 50.1702];
-toX = [36.2137; 27.3431; 29.8451; 44.4020];
-toY = [8.1196; 9.2569; 54.0647; 49.9706];
-H = computeHomography(fromX, fromY, toX, toY);
-peri1 = warp(peri1, H, canvas_size);
-
-fromX = [23; 23; 37; 37];
-fromY = [0; 58; 58; 0];
-toX = [1; 1; 17; 17];
-toY = [0; 58; 58; 0];
-H = computeHomography(fromX, fromY, toX, toY);
-peri2 = warp(peri2, H, canvas_size);
-
-main = warpMain(main, canvas_size);
+peri1 = warpImage(main, peri1, canvas_size);
+peri2 = warpImage(main, peri2, canvas_size);
+main = warpMain(main, canvas_size, 0, 0);
 
 main(isnan(main)) = 0;
 peri1(isnan(peri1)) = 0;
