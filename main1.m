@@ -1,7 +1,7 @@
 clear all
 close all
 
-canvas_size = 1000;
+canvas_size = 500;
 
 main = rgb2gray(im2double(imread('apple/middle.jpg')));
 peri1 = rgb2gray(im2double(imread('apple/left.jpg')));
