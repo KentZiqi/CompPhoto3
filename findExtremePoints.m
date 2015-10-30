@@ -1,6 +1,6 @@
 function [minX, minY, maxX, maxY] = findExtremePoints(I, H)
     [x,y] = size(I);
-    corners = [1 1;x 1; 1 y; x y];
+    corners = [1 1; 1 x; y 1; y x];
     new_corners = [];
     for i=1:1:4
         [px, py]= mapPoint(corners(i,1),corners(i,2),H,1);

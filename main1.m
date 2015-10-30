@@ -34,16 +34,15 @@ fromX = [23; 23; 37; 37];
 fromY = [0; 58; 58; 0];
 toX = [1; 1; 17; 17];
 toY = [0; 58; 58; 0];
-
 H = computeHomography(fromX, fromY, toX, toY);
 peri2 = warp(peri2, H);
 
 [h,w] = size(main);
 J = zeros(500, 500);
 for i = 1:1:h
-    for j = 1:1:w
-        J(i+250,j+250) = interp2(main,j,i);
-    end
+   for j = 1:1:w
+       J(i+250,j+250) = interp2(main,j,i);
+   end
 end
 
 peri1(isnan(peri1)) = 0;

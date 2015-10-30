@@ -1,10 +1,10 @@
-function J = warp(image, H)
-    [minX, minY, maxX, maxY] = findExtremePoints(image,H);
+function J = warp(peri, H)
+    [minX, minY, maxX, maxY] = findExtremePoints(peri,H);
     J = zeros(500, 500);
-    for i = floor(minX):1:ceil(maxX)
-        for j = floor(minY):1:ceil(maxY)
-            [imageX,imageY] = mapPoint(i,j,H,0);
-            J(j+250,i+250) = interp2(image,imageX,imageY);
+    for mainX = floor(minX):1:ceil(maxX)
+        for mainY = floor(minY):1:ceil(maxY)
+            [periX,periY] = mapPoint(mainX,mainY,H,0);
+            J(mainY+250,mainX+250) = interp2(peri,periX,periY);
         end
     end
 end
