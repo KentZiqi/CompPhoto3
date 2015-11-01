@@ -1,5 +1,5 @@
-function I = simpleAssembly( main, left, right, canvas_size )
-%simpleAssembly Simple Assembly of 3 photographs
+function I = simpleAssembly( main, peripheral_images, canvas_size )
+%simpleAssembly Simple Assembly of images
     I = zeros(canvas_size, canvas_size);
     [h, w] = size(I);
     for i = 1:1:h
@@ -7,10 +7,11 @@ function I = simpleAssembly( main, left, right, canvas_size )
             if main(i,j) ~= 0
                 I(i,j) = main(i,j);
             else
-                if left(i,j) ~= 0
-                    I(i,j) = left(i,j);
-                else
-                    I(i,j) = right(i,j);
+                for k=1:length(peripheral_images)
+                    image = peripheral_images{k};
+                    if image(i,j) ~= 0
+                        I(i,j) = image(i,j);
+                    end
                 end
             end
         end

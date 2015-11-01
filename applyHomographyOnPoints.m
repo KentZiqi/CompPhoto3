@@ -1,4 +1,4 @@
-function [xx,yy] = mapPoint(X,Y,H,inverse)
+function [xx,yy] = applyHomographyOnPoints(X,Y,H,inverse)
     if inverse
         H = inv(H);
     end
