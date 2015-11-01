@@ -1,14 +1,17 @@
 clear all
 close all
 
+%% Configure variables here
 center_image_name = 'middle';
 input_dir = 'window/';
-output_dir = './out/';
+output_dir = './out/'; % Make sure you have mkdir'ed this directory
 input_file_ext = 'jpg';
 output_file_ext = 'tif';
+canvas_scale_of_center_image = 5; % Canvas size will be this times size of center image
 
+%% Don't touch below here
 center = rgb2gray(im2double(imread([input_dir center_image_name '.' input_file_ext])));
-canvas_size = length(center) * 5;
+canvas_size = length(center) * canvas_scale_of_center_image;
 files = dir([input_dir '*.' input_file_ext]);
 peripheral_images = [];
 count = 1;
@@ -30,8 +33,4 @@ center = offsetImage(center, canvas_size, 0, 0);
 imwrite(center, [output_dir 'middle' '.' output_file_ext]);
 
 I = simpleAssembly(center, peripheral_images, canvas_size);
-figure
-imshow(I)
-
-%save('images');
-
+imwrite(I, [output_dir 'mosaic' '.' output_file_ext]);
