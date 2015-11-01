@@ -3,7 +3,7 @@ close all
 
 %% Configure variables here
 center_image_name = 'middle';
-input_dir = 'window/';
+input_dir = 'aoi/';
 output_dir = './out/'; % Make sure you have mkdir'ed this directory
 input_file_ext = 'jpg';
 output_file_ext = 'tif';
@@ -23,6 +23,7 @@ for file = files'
         I = imread([input_dir file_name]);
         I = rgb2gray(im2double(I));
         I = warpImage(center, I, canvas_size);
+        
         I(isnan(I)) = 0;
         imwrite(I, [output_dir file_name(1:end-3) output_file_ext]);
         peripheral_images{count} = I;
@@ -32,5 +33,5 @@ end
 center = offsetImage(center, canvas_size, 0, 0);
 imwrite(center, [output_dir 'middle' '.' output_file_ext]);
 
-I = simpleAssembly(center, peripheral_images, canvas_size);
+I = blendedAssembly(center, peripheral_images, canvas_size);
 imwrite(I, [output_dir 'mosaic' '.' output_file_ext]);
