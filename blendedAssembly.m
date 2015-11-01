@@ -8,7 +8,7 @@ function I = blendedAssembly( center, peripheral_images, canvas_size )
     blurred_mask_center = imgaussfilt(double(unblurred_mask_center), sigma);
     alpha_mask_center = blurred_mask_center .* unblurred_mask_center;
 
-    alpha_masks = []
+    alpha_masks = [];
     for k=1:length(peripheral_images)
         image = peripheral_images{k};
         unblurred_mask = ~isnan(image);
@@ -21,16 +21,20 @@ function I = blendedAssembly( center, peripheral_images, canvas_size )
     [h, w] = size(I);
     for i = 1:1:h
         for j = 1:1:w
-            totalMask = alpha_mask_center(i,j);
-            for k=1:length(alpha_masks)
-                alpha_mask = alpha_masks{k};
-                totalMask = totalMask + alpha_mask(i,j);
-            end
-            I(i,j) = alpha_mask_center(i,j)/totalMask * center(i,j);
-            for k=1:length(alpha_masks)
-                alpha_mask = alpha_masks{k};
-                image = peripheral_images{k};
-                I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+            if alpha_mask_center(i,j) >= 0.99
+            	I(i,j) = center(i,j);
+            else  
+                totalMask = alpha_mask_center(i,j);
+                for k=1:length(alpha_masks)
+                    alpha_mask = alpha_masks{k};
+                    totalMask = totalMask + alpha_mask(i,j);
+                end
+                I(i,j) = alpha_mask_center(i,j)/totalMask * center(i,j);
+                for k=1:length(alpha_masks)
+                    alpha_mask = alpha_masks{k};
+                    image = peripheral_images{k};
+                    I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+                end
             end
         end
     end
