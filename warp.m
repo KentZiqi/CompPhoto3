@@ -6,6 +6,6 @@ function J = warp(image, H, canvas_size)
     [XX,YY] = makePoints(X,Y,minX);
     [XX,YY] = mapPoint(XX,YY,H,0);
     J = interp2(image,XX,YY);
-    J = reshape(J,[length(Y),length(X)])
+    J = reshape(J,[length(Y),length(X)]);
     J = warpMain(J, canvas_size, minX, minY);
 end

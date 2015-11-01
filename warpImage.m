@@ -10,4 +10,9 @@ function peri = warpImage(main,peri,canvas_size)
     H = computeHomography(fromX, fromY, toX, toY);
     
     peri = warp(peri, H, canvas_size);
+    
+    fromX
+    fromY
+    toX
+    toY
 end
