@@ -32,9 +32,14 @@ function I = twoBandAssembly( center, peripheral_images, canvas_size )
             	I(i,j) = center(i,j);
             else  
                 totalMask = alpha_mask_center(i,j);
+                totalMaskhigh = alpha_mask_center(i,j);
                 for k=1:length(alpha_masks)
                     alpha_mask = alpha_masks{k};
-                    totalMask = totalMask + alpha_mask(i,j);
+                    if is_low(k) == 1
+                        totalMask = totalMask + alpha_mask(i,j);
+                    else
+                        totalMaskhigh = totalMaskhigh + alpha_mask(i,j);
+                    end
                 end
                 if ~isnan(center(i,j))
                     I(i,j) = alpha_mask_center(i,j)/totalMask * center(i,j);
@@ -43,7 +48,11 @@ function I = twoBandAssembly( center, peripheral_images, canvas_size )
                     alpha_mask = alpha_masks{k};
                     image = peripheral_images{k};
                     if ~isnan(image(i,j))
-                        I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+                        if is_low(k) == 1
+                            I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+                        else
+                            I(i,j) = I(i,j) + alpha_mask(i,j)/totalMaskhigh * image(i,j);
+                        end
                     end
                 end
             end
