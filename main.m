@@ -45,5 +45,5 @@ for file = files'
     count = count + 1;
 end
 
-I = blendedAssembly(center, peripheral_images, canvas_size);
+I = twoBandAssembly(center, peripheral_images, canvas_size);
 imwrite(I, [output_dir 'mosaic' '.' output_file_ext]);
