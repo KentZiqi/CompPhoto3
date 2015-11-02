@@ -1,7 +1,7 @@
 function I = blendedAssembly( center, peripheral_images, canvas_size )
 %blendedAssembly Summary of this function goes here
 %   Detailed explanation goes here
-    sigma = 10;
+    sigma = 100;
 
     center(~center) = nan;
     unblurred_mask_center = ~isnan(center);
@@ -11,6 +11,7 @@ function I = blendedAssembly( center, peripheral_images, canvas_size )
     alpha_masks = [];
     for k=1:length(peripheral_images)
         image = peripheral_images{k};
+        image(~image) = nan;
         unblurred_mask = ~isnan(image);
         blurred_mask = imgaussfilt(double(unblurred_mask), sigma);
         alpha_mask = blurred_mask .* unblurred_mask;
@@ -29,11 +30,15 @@ function I = blendedAssembly( center, peripheral_images, canvas_size )
                     alpha_mask = alpha_masks{k};
                     totalMask = totalMask + alpha_mask(i,j);
                 end
-                I(i,j) = alpha_mask_center(i,j)/totalMask * center(i,j);
+                if ~isnan(center(i,j))
+                    I(i,j) = alpha_mask_center(i,j)/totalMask * center(i,j);
+                end
                 for k=1:length(alpha_masks)
                     alpha_mask = alpha_masks{k};
                     image = peripheral_images{k};
-                    I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+                    if ~isnan(image(i,j))
+                        I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+                    end
                 end
             end
         end
