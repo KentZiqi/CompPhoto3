@@ -1,57 +1,56 @@
-function I = twoBandAssembly( center, peripheral_images, canvas_size )
-%blendedAssembly Summary of this function goes here
-%   Detailed explanation goes here
-    sigma = 100;
+function [low, high] = twoBandAssembly( center_low, center_high, peripheral_images, isLowResolution, canvas_size )
+%twoBandAssembly Two Band Blending Assembly
 
-    center(~center) = nan;
-    unblurred_mask_center = ~isnan(center);
-    blurred_mask_center = imgaussfilt(double(unblurred_mask_center), sigma);
-    alpha_mask_center = blurred_mask_center .* unblurred_mask_center;
+    alpha_mask_center_low = ~isnan(center_high);
+    blurred_mask_center = imgaussfilt(double(alpha_mask_center_low), 100);
+    alpha_mask_center_high = blurred_mask_center .* alpha_mask_center_low;
     
-    [peripheral_images, is_low] = separateImages(peripheral_images);
-
     alpha_masks = {};
     for k=1:length(peripheral_images)
         image = peripheral_images{k};
-        image(~image) = nan;
         unblurred_mask = ~isnan(image);
-        if is_low(k) == 0
+        if isLowResolution(k) == 0
             alpha_mask = unblurred_mask;
         else
-            blurred_mask = imgaussfilt(double(unblurred_mask), sigma);
+            blurred_mask = imgaussfilt(double(unblurred_mask), 100);
             alpha_mask = blurred_mask .* unblurred_mask;
         end
         alpha_masks{k} = alpha_mask;
     end
     
-    I = zeros(canvas_size, canvas_size);
-    [h, w] = size(I);
+    low = zeros(canvas_size, canvas_size);
+    high = zeros(canvas_size, canvas_size);
+    [h, w] = size(low);
     for i = 1:1:h
         for j = 1:1:w
-            if alpha_mask_center(i,j) >= 0.99
-            	I(i,j) = center(i,j);
+            if alpha_mask_center_high(i,j) >= 0.99
+            	low(i,j) = center_low(i,j);
+                high(i,j) = center_high(i,j);
             else  
-                totalMask = alpha_mask_center(i,j);
-                totalMaskhigh = alpha_mask_center(i,j);
+                totalMask = alpha_mask_center_low(i,j);
+                totalMaskHigh = alpha_mask_center_high(i,j);
                 for k=1:length(alpha_masks)
                     alpha_mask = alpha_masks{k};
-                    if is_low(k) == 1
+                    if isLowResolution(k) == 1
                         totalMask = totalMask + alpha_mask(i,j);
                     else
-                        totalMaskhigh = totalMaskhigh + alpha_mask(i,j);
+                        totalMaskHigh = totalMaskHigh + alpha_mask(i,j);
                     end
                 end
-                if ~isnan(center(i,j))
-                    I(i,j) = alpha_mask_center(i,j)/totalMask * center(i,j);
+                if ~isnan(center_low(i,j))
+                    low(i,j) = alpha_mask_center_low(i,j)/totalMask * center_low(i,j);
+                end
+                if ~isnan(center_high(i,j))
+                    high(i,j) = alpha_mask_center_high(i,j)/totalMaskHigh * center_high(i,j);
                 end
                 for k=1:length(alpha_masks)
                     alpha_mask = alpha_masks{k};
                     image = peripheral_images{k};
                     if ~isnan(image(i,j))
-                        if is_low(k) == 1
-                            I(i,j) = I(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
+                        if isLowResolution(k) == 1
+                            low(i,j) = low(i,j) + alpha_mask(i,j)/totalMask * image(i,j);
                         else
-                            I(i,j) = I(i,j) + alpha_mask(i,j)/totalMaskhigh * image(i,j);
+                            high(i,j) = high(i,j) + alpha_mask(i,j)/totalMaskHigh * image(i,j);
                         end
                     end
                 end

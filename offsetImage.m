@@ -1,6 +1,6 @@
 function offsetted_image = offsetImage(image, canvas_size, additional_offset_x, additional_offset_y)
     [h,w] = size(image);
-    offsetted_image = zeros(canvas_size, canvas_size);
+    offsetted_image = NaN(canvas_size);
     offset = round(canvas_size/3);
     additional_offset_y = round(additional_offset_y);
     additional_offset_x = round(additional_offset_x);
