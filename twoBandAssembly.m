@@ -1,6 +1,4 @@
 function [low, high] = twoBandAssembly( center_low, center_high, peripheral_images, isLowResolution, canvas_size )
-%twoBandAssembly Two Band Blending Assembly
-
     alpha_mask_center_high = ~isnan(center_high);
     blurred_mask_center = imgaussfilt(double(alpha_mask_center_high), 100);
     alpha_mask_center_low = blurred_mask_center .* alpha_mask_center_high;
